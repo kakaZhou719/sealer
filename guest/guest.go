@@ -43,6 +43,6 @@ func (d *Default) Apply(cluster *v1.Cluster) error {
 	return nil
 }
 
-func (d Default) Delete(cluster *v1.Cluster) error {
+func (d Default) Delete(*v1.Cluster) error {
 	panic("implement me")
 }

@@ -88,7 +88,10 @@ func (f *FileSystem) UnMount(cluster *v1.Cluster) error {
 
 func mountRootfs(ipList []string, target string, cluster *v1.Cluster) error {
 	SSH := ssh.NewSSHByCluster(cluster)
-	ssh.WaitSSHReady(SSH, ipList...)
+	err := ssh.WaitSSHReady(SSH, ipList...)
+	if err != nil {
+		return err
+	}
 	var wg sync.WaitGroup
 	var flag bool
 	var mutex sync.Mutex

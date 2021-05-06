@@ -5,6 +5,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"os"
+	"path/filepath"
+
 	"github.com/alibaba/sealer/common"
 	"github.com/alibaba/sealer/image/reference"
 	imageutils "github.com/alibaba/sealer/image/utils"
@@ -19,8 +23,6 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/opencontainers/go-digest"
 	"github.com/pkg/errors"
-	"os"
-	"path/filepath"
 )
 
 const (
@@ -202,7 +204,6 @@ func (d DefaultImageService) downloadLayers(named reference.Named, manifest sche
 			Max:        layer.Size,
 			SuccessMsg: shortHex + " " + imagePullComplete,
 			ProgressSrc: progress.TakeOverTask{
-				Cxt: progress.Context{}.WithReader(blobReader),
 				Action: func(cxt progress.Context) error {
 					rc := cxt.GetCurrentReaderCloser()
 					if rc == nil {
@@ -210,7 +211,12 @@ func (d DefaultImageService) downloadLayers(named reference.Named, manifest sche
 						errorCh <- err
 						return err
 					}
-					defer rc.Close()
+					defer func(rc io.ReadCloser) {
+						err := rc.Close()
+						if err != nil {
+
+						}
+					}(rc)
 					curBar := cxt.GetCurrentBar()
 					if curBar == nil {
 						err = errors.New("failed to start uploading layer, err: no current bar found")
@@ -224,6 +230,7 @@ func (d DefaultImageService) downloadLayers(named reference.Named, manifest sche
 					}
 					return nil
 				},
+				Cxt: progress.Context{}.WithReader(blobReader),
 			},
 		})
 	}
@@ -329,7 +336,12 @@ func (d DefaultImageService) uploadLayers(repo string, layers []v1.Layer, blobs 
 					// so we can set the total of the bar at the time only
 					curBar.SetTotal(fi.Size(), false)
 					prc := curBar.ProxyReader(file)
-					defer prc.Close()
+					defer func(prc io.ReadCloser) {
+						err := prc.Close()
+						if err != nil {
+
+						}
+					}(prc)
 					if err = d.registry.UploadLayer(context.Background(), repo, layerDig, prc); err != nil {
 						errCh <- err
 						return err

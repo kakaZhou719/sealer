@@ -51,7 +51,7 @@ func (a *AliProvider) TryGetInstance(request *ecs.DescribeInstancesRequest, resp
 			}
 			for _, instance := range instances {
 				if instance.NetworkInterfaces.NetworkInterface[0].PrimaryIpAddress == "" {
-					return errors.New("PrimaryIpAddress cannt nob be nil")
+					return errors.New("PrimaryIpAddress cannot nob be nil")
 				}
 			}
 		}
@@ -60,7 +60,7 @@ func (a *AliProvider) TryGetInstance(request *ecs.DescribeInstancesRequest, resp
 	})
 }
 
-func (a *AliProvider) InputIPlist(instanceRole string) (iplist []string, err error) {
+func (a *AliProvider) InputIPlist(instanceRole string) (IPList []string, err error) {
 	var ipList []string
 	var hosts *v1.Hosts
 	switch instanceRole {

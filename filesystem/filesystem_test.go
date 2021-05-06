@@ -24,7 +24,7 @@ func TestMount(t *testing.T) {
 						Name: "cluster",
 					},
 					Spec: v1.ClusterSpec{
-						Image: "kuberentes:v1.18.6",
+						Image: "kubernetes:v1.18.6",
 						Masters: v1.Hosts{
 							IPList: []string{
 								"192.168.56.111",
@@ -72,7 +72,7 @@ func TestUnMount(t *testing.T) {
 						Name: "cluster",
 					},
 					Spec: v1.ClusterSpec{
-						Image: "kuberentes:v1.18.6",
+						Image: "kubernetes:v1.18.6",
 						Masters: v1.Hosts{
 							IPList: []string{
 								"192.168.56.111",

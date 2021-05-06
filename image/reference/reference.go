@@ -12,7 +12,7 @@ type Named struct {
 	tag     string // v1.6
 }
 
-// build a ImageNamed
+// ParseToNamed build a ImageNamed
 func ParseToNamed(name string) (Named, error) {
 	name = strings.TrimSpace(name)
 	err := validate(name)

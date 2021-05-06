@@ -25,15 +25,15 @@ type MetaData struct {
 }
 
 type Net interface {
-	// if template is "" using default template
+	// Manifests if template is "" using default template
 	Manifests(template string) (string, error)
-	// return cni template file
+	// Template return cni template file
 	Template() string
 }
 
-func render(data MetaData, templ string) (string, error) {
+func render(data MetaData, temp string) (string, error) {
 	var b bytes.Buffer
-	t := template.Must(template.New("net").Parse(templ))
+	t := template.Must(template.New("net").Parse(temp))
 	if err := t.Execute(&b, &data); err != nil {
 		return "", fmt.Errorf("render execute failed, %s", err)
 	}

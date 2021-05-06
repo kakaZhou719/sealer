@@ -11,19 +11,19 @@ func TestDefault_Apply(t *testing.T) {
 		Cluster *v1.Cluster
 	}
 	tests := []struct {
-		name    string
-		args    args
-		wanterr bool
+		name   string
+		args   args
+		wander bool
 	}{
 		{
 			name: "Master exec cmd : echo 'guest_test success",
 			args: args{
 				Cluster: &v1.Cluster{
 					Spec: v1.ClusterSpec{
-						Image: "kuberentes:v1.18.6",
+						Image: "kubernetes:v1.18.6",
 						SSH: v1.SSH{
 							User:     "root",
-							Passwd:   "huaijiahui.com",
+							Passwd:   "Guarini.com",
 							Pk:       "",
 							PkPasswd: "",
 						},
@@ -33,13 +33,13 @@ func TestDefault_Apply(t *testing.T) {
 					},
 				},
 			},
-			wanterr: false,
+			wander: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			Default := NewGuestManager()
-			if err := Default.Apply(tt.args.Cluster); (err != nil) != tt.wanterr {
+			if err := Default.Apply(tt.args.Cluster); (err != nil) != tt.wander {
 				t.Errorf("Apply failed, %s", err)
 			}
 		})

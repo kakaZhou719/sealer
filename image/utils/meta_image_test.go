@@ -1,8 +1,9 @@
 package utils
 
 import (
-	v1 "github.com/alibaba/sealer/types/api/v1"
 	"testing"
+
+	v1 "github.com/alibaba/sealer/types/api/v1"
 )
 
 func TestImage(t *testing.T) {
@@ -14,11 +15,11 @@ func TestImage(t *testing.T) {
 		arg  args
 	}{
 		{
-			name: "test cluster image kuberentes:v1.18.6",
+			name: "test cluster image kubernetes:v1.18.6",
 			arg: args{
 				cluster: &v1.Cluster{
 					Spec: v1.ClusterSpec{
-						Image: "kuberentes:v1.18.6",
+						Image: "kubernetes:v1.18.6",
 					},
 				},
 			},
@@ -44,20 +45,20 @@ func TestSetImageMetadata(t *testing.T) {
 		arg  args
 	}{
 		{
-			name: "test set image kuberentes:v1.18.99",
+			name: "test set image kubernetes:v1.18.99",
 			arg: args{
 				ImageMetadata{
-					Name: "kuberentes:v1.18.99",
-					Id:   "f6de07561db99",
+					Name: "kubernetes:v1.18.99",
+					ID:   "f6de07561db99",
 				},
 			},
 		},
 		{
-			name: "test set image kuberentes:v1.18.99",
+			name: "test set image kubernetes:v1.18.99",
 			arg: args{
 				ImageMetadata{
-					Name: "kuberentes:v1.18.99",
-					Id:   "f6de07561db98",
+					Name: "kubernetes:v1.18.99",
+					ID:   "f6de07561db98",
 				},
 			},
 		},

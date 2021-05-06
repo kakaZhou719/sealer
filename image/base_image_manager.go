@@ -2,7 +2,11 @@ package image
 
 import (
 	"context"
-	"encoding/json" //nolint:goimports
+	"encoding/json" //nolint:GoImports
+	"io/ioutil"
+	"os"
+	"path/filepath"
+
 	"github.com/alibaba/sealer/common"
 	"github.com/alibaba/sealer/image/reference"
 	imageutils "github.com/alibaba/sealer/image/utils"
@@ -12,9 +16,6 @@ import (
 	"github.com/justadogistaken/reg/registry"
 	"github.com/opencontainers/go-digest"
 	"github.com/wonderivan/logger"
-	"io/ioutil"
-	"os"
-	"path/filepath"
 	"sigs.k8s.io/yaml"
 )
 
@@ -95,7 +96,7 @@ func (bim BaseImageManager) downloadImageManifestConfig(named reference.Named, d
 
 // used to sync image into DefaultImageMetadataFile
 func syncImagesMap(image v1.Image) error {
-	return imageutils.SetImageMetadata(imageutils.ImageMetadata{Name: image.Name, Id: image.Spec.ID})
+	return imageutils.SetImageMetadata(imageutils.ImageMetadata{Name: image.Name, ID: image.Spec.ID})
 }
 
 // dump image yaml to DefaultImageMetaRootDir

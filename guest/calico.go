@@ -4,9 +4,9 @@ type Calico struct {
 	MetaData
 }
 
-func (c *Calico) Manifests(templ string) (string, error) {
-	if templ == "" {
-		templ = c.Template()
+func (c *Calico) Manifests(temp string) (string, error) {
+	if temp == "" {
+		temp = c.Template()
 	}
 	if c.CIDR == "" {
 		c.CIDR = defaultCIDR
@@ -16,7 +16,7 @@ func (c *Calico) Manifests(templ string) (string, error) {
 	}
 	var manifests string
 	var err error
-	manifests, err = render(c.MetaData, templ)
+	manifests, err = render(c.MetaData, temp)
 	if err != nil {
 		return "", err
 	}
@@ -37,13 +37,13 @@ metadata:
   name: calico-config
   namespace: kube-system
 data:
-  # Typha is disabled.
-  typha_service_name: "none"
+  # Typhus is disabled.
+  typhus_service_name: "none"
   # Configure the backend to use.
   calico_backend: "bird"
 
   # Configure the MTU to use
-  veth_mtu: "{{ .MTU }}"
+  vetch_mtu: "{{ .MTU }}"
 
   # The CNI network configuration to install on each node.  The special
   # values in this config will be automatically populated.
@@ -56,16 +56,16 @@ data:
           "type": "calico",
           "log_level": "info",
           "datastore_type": "kubernetes",
-          "nodename": "__KUBERNETES_NODE_NAME__",
+          "NodeName": "__KUBERNETES_NODE_NAME__",
           "mtu": __CNI_MTU__,
-          "ipam": {
-              "type": "calico-ipam"
+          "IPam": {
+              "type": "calico-IPam"
           },
           "policy": {
               "type": "k8s"
           },
           "kubernetes": {
-              "kubeconfig": "__KUBECONFIG_FILEPATH__"
+              "KubeConfig": "__KUBECONFIG_FILEPATH__"
           }
         },
         {
