@@ -8,9 +8,9 @@
 name: Labeler
 on:
   issues:
-    types: [opened]
+    types: [ opened,reopened ]
   pull_request:
-    types: [opened]
+    types: [ opened,reopened ]
 
 jobs:
   label_issues:
@@ -20,12 +20,10 @@ jobs:
         uses: andymckay/labeler@1.0.2
         with:
           add-labels: "needs-triage,bug"
-          ignore-if-labeled: true
           ignore-if-assigned: false
 
       - name: Label test
         uses: andymckay/labeler@1.0.2
         with:
           add-labels: "need-test"
-          ignore-if-labeled: true
           ignore-if-assigned: false
