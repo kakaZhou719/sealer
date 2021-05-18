@@ -6,17 +6,26 @@
 # https://github.com/actions/labeler
 
 name: Labeler
-on: [pull_request]
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
 
 jobs:
-  label:
-
+  label_issues:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-
     steps:
-    - uses: actions/labeler@v2
-      with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Label issues
+        uses: andymckay/labeler@1.0.2
+        with:
+          add-labels: "needs-triage,bug"
+          ignore-if-labeled: true
+          ignore-if-assigned: false
+
+      - name: Label test
+        uses: andymckay/labeler@1.0.2
+        with:
+          add-labels: "need-test"
+          ignore-if-labeled: true
+          ignore-if-assigned: false
