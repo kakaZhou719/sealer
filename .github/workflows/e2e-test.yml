@@ -1,4 +1,4 @@
-name: e2e
+name: Sealer-Test
 
 on:
   push:
@@ -38,9 +38,6 @@ jobs:
         with:
           ref: ${{ github.ref }}
           path: src/github.com/alibaba/sealer
-
-      - name: Downloading go dependencies
-        run: go mod vendor
 
       - name: Install sealer
         run: hack/install-sealer.sh
