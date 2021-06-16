@@ -46,6 +46,7 @@ var _ = Describe("sealer apply", func() {
 						testhelper.DeleteFileLocally(settings.GetClusterWorkClusterfile(rawCluster.Name))
 					})
 
+					
 					It("init, scale up, scale down, clean up", func() {
 						// 1,init cluster to 2 nodes and write to disk
 						By("start to init cluster")
