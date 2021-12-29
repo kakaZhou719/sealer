@@ -18,7 +18,7 @@ linters:
   enable:
     - gofmt
     - goimports
-    - revive
+    - golint
     - stylecheck
     - goconst
     - gosimple
