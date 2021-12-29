@@ -104,6 +104,7 @@ func (d DefaultImageMetadataService) GetRemoteImage(imageName string) (v1.Image,
 
 	// just transform it to schema2.DeserializedManifest
 	// because we only upload this kind manifest.
+	//nolint
 	scheme2Manifest, ok := manifest.(*schema2.DeserializedManifest)
 	if !ok {
 		return v1.Image{}, fmt.Errorf("failed to parse manifest %s to DeserializedManifest", named.RepoTag())
