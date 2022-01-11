@@ -17,7 +17,7 @@ package buildimage
 import (
 	"context"
 	"fmt"
-	fi "io/fs"
+	"io/fs"//#nosec
 	"io/ioutil"
 	"path/filepath"
 
@@ -127,7 +127,7 @@ func parseYamlImages(srcPath string) ([]string, error) {
 		return nil, err
 	}
 
-	err = filepath.Walk(manifestsPath, func(path string, f fi.FileInfo, err error) error {
+	err = filepath.Walk(manifestsPath, func(path string, f fs.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
