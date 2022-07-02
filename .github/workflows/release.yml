@@ -1,4 +1,4 @@
-on: [ push, pull_request ]
+on: [ push ]
 
 name: Release
 
@@ -41,6 +41,7 @@ jobs:
           VERSION: ${{ steps.contentrel.outputs.stringver }}
         run: |
           sh note.sh
+          cat src/github.com/sealerio/sealer/release_note.md
         working-directory: src/github.com/sealerio/sealer
 
       - name: Save release notes
