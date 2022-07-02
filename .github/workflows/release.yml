@@ -118,8 +118,8 @@ jobs:
           draft: true
           prerelease: ${{ contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
           body_path: ./builds/sealer-release-notes/release_note.md
-          files: |
-            builds/sealer-binaries/*
+#          files: |
+#            builds/sealer-binaries/*
 #      - name: Build binareies to oss
 #        if: ${{ github.repository == 'sealerio/sealer' && github.ref_type=='tag' }}
 #        run: |
