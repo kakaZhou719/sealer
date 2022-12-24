@@ -88,7 +88,7 @@ jobs:
         shell: bash
         run: |
           export MULTI_PLATFORM_BUILD=true
-          make build
+          make build linux
         working-directory: src/github.com/sealerio/sealer
 
       - name: Save build binaries
