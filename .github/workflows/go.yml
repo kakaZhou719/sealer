@@ -59,7 +59,7 @@ jobs:
         shell: bash
         run: |
           export MULTI_PLATFORM_BUILD=true
-          make linux
+          make build-in-docker
         working-directory: src/github.com/sealerio/sealer
 
       - name: Save build binaries
