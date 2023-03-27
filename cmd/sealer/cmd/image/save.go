@@ -64,6 +64,7 @@ func NewSaveCmd() *cobra.Command {
 	flags.BoolVarP(&saveOpts.Quiet, "quiet", "q", false, "Suppress the output")
 	flags.StringVar(&saveOpts.TmpDir, "tmp-dir", "", "set temporary directory when save image. if not set, use system`s temporary directory")
 	flags.BoolVar(&saveOpts.Compress, "compress", false, "Compress tarball image layers when saving to a directory using the 'dir' transport. (default is same compression type as source)")
+	flags.StringVar(&saveOpts.TmpDir, "tmp-dir", "", "set temporary directory when save image. if not set, use system`s temporary directory")
 	if err := saveCmd.MarkFlagRequired("output"); err != nil {
 		logrus.Errorf("failed to init flag: %v", err)
 		os.Exit(1)
