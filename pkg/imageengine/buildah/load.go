@@ -17,6 +17,7 @@ package buildah
 import (
 	"context"
 	"fmt"
+	"io"
 	"io/fs"
 	"io/ioutil"
 	"os"
@@ -34,15 +35,24 @@ import (
 
 var LoadError = errors.Errorf("failed to load new image")
 
+type loadOptions struct {
+	writer io.Writer
+	tmpDir string
+}
+
 func (engine *Engine) Load(opts *options.LoadOptions) error {
 	imageSrc := opts.Input
 	if _, err := os.Stat(imageSrc); err != nil {
 		return err
 	}
 
-	loadOpts := &libimage.LoadOptions{}
+	loadOpts := loadOptions{}
 	if !opts.Quiet {
-		loadOpts.Writer = os.Stderr
+		loadOpts.writer = os.Stderr
+	}
+
+	if opts.TmpDir != "" {
+		loadOpts.tmpDir = opts.TmpDir
 	}
 
 	srcFile, err := os.Open(filepath.Clean(imageSrc))
@@ -147,8 +157,20 @@ func (engine *Engine) Load(opts *options.LoadOptions) error {
 	return nil
 }
 
-func (engine *Engine) loadOneImage(imageSrc string, loadOpts *libimage.LoadOptions) error {
-	loadedImages, err := engine.ImageRuntime().Load(context.Background(), imageSrc, loadOpts)
+func (engine *Engine) loadOneImage(imageSrc string, loadOpts loadOptions) error {
+	sysContext := engine.libimageRuntime.SystemContext()
+	if loadOpts.tmpDir != "" {
+		sysContext.BigFilesTemporaryDir = loadOpts.tmpDir
+	}
+
+	libLoadOptions := &libimage.LoadOptions{
+		CopyOptions: libimage.CopyOptions{
+			SystemContext: sysContext,
+			Writer:        loadOpts.writer,
+		},
+	}
+
+	loadedImages, err := engine.ImageRuntime().Load(context.Background(), imageSrc, libLoadOptions)
 	if err != nil {
 		return err
 	}

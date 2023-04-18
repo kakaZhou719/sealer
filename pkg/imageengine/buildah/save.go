@@ -57,7 +57,12 @@ func (engine *Engine) Save(opts *options.SaveOptions) error {
 	}
 
 	if !isManifest {
-		return engine.saveOneImage(imageNameOrID, opts.Format, imageTar, opts.Compress)
+		return engine.saveOneImage(imageNameOrID, saveOptions{
+			format:   opts.Format,
+			path:     imageTar,
+			tmpDir:   opts.TmpDir,
+			compress: opts.Compress,
+		})
 	}
 
 	// save multi-arch images :including each platform images and manifest.
@@ -78,7 +83,7 @@ func (engine *Engine) Save(opts *options.SaveOptions) error {
 		}
 	}()
 
-	tempDir, err := os.MkdirTemp("", "sealer-save-tmp")
+	tempDir, err := os.MkdirTemp(opts.TmpDir, "sealer-save-tmp")
 	if err != nil {
 		return fmt.Errorf("failed to create %s, err: %v", tempDir, err)
 	}
@@ -110,7 +115,12 @@ func (engine *Engine) Save(opts *options.SaveOptions) error {
 		}
 
 		instanceTar := filepath.Join(tempDir, instance.ID()+".tar")
-		err = engine.saveOneImage(instance.ID(), opts.Format, instanceTar, opts.Compress)
+		err = engine.saveOneImage(instance.ID(), saveOptions{
+			format:   opts.Format,
+			path:     imageTar,
+			tmpDir:   opts.TmpDir,
+			compress: opts.Compress,
+		})
 		if err != nil {
 			return err
 		}
@@ -141,10 +151,21 @@ func (engine *Engine) Save(opts *options.SaveOptions) error {
 	return err
 }
 
-func (engine *Engine) saveOneImage(imageNameOrID, format, path string, compress bool) error {
-	saveOptions := &libimage.SaveOptions{
+type saveOptions struct {
+	format, path, tmpDir string
+	compress             bool
+}
+
+func (engine *Engine) saveOneImage(imageNameOrID string, saveOpts saveOptions) error {
+	sysContext := engine.libimageRuntime.SystemContext()
+	if saveOpts.tmpDir != "" {
+		sysContext.BigFilesTemporaryDir = saveOpts.tmpDir
+	}
+
+	libSaveOpts := &libimage.SaveOptions{
 		CopyOptions: libimage.CopyOptions{
-			DirForceCompress:            compress,
+			SystemContext:               sysContext,
+			DirForceCompress:            saveOpts.compress,
 			OciAcceptUncompressedLayers: false,
 			// Force signature removal to preserve backwards compat.
 			// See https://github.com/containers/podman/pull/11669#issuecomment-925250264
@@ -153,5 +174,5 @@ func (engine *Engine) saveOneImage(imageNameOrID, format, path string, compress 
 	}
 
 	names := []string{imageNameOrID}
-	return engine.ImageRuntime().Save(context.Background(), names, format, path, saveOptions)
+	return engine.ImageRuntime().Save(context.Background(), names, saveOpts.format, saveOpts.path, libSaveOpts)
 }
